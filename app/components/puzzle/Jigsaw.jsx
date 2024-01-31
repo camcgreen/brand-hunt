@@ -85,6 +85,7 @@ export default function Jigsaw() {
                   borderColor: selectedPieceId ? 'orange' : 'black',
                 }}
                 onClick={() => reorderPieces(i)}
+                key={i}
               >
                 {pieces[boardPiece].content}
               </li>
@@ -95,6 +96,7 @@ export default function Jigsaw() {
                   borderColor: selectedPieceId ? 'orange' : 'black',
                 }}
                 onClick={() => reorderPieces(i)}
+                key={i}
               ></li>
             )
           )}
@@ -110,6 +112,7 @@ export default function Jigsaw() {
                 onClick={() => {
                   setSelectedPieceId(piece.id)
                 }}
+                key={piece.id}
               >
                 {piece.content}
               </li>
