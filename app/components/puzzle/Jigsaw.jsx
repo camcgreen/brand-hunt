@@ -45,6 +45,7 @@ export default function Jigsaw() {
   ])
   const [selectedPieceId, setSelectedPieceId] = useState(null)
   const [oldSelectedPieceIndex, setOldSelectedPieceIndex] = useState(null)
+  const [puzzleComplete, setPuzzleComplete] = useState(false)
 
   useEffect(() => {
     const orderedPieces = [...pieces].sort(
@@ -54,14 +55,19 @@ export default function Jigsaw() {
     orderedPieces.forEach((piece) => solutionPieces.push(piece.id))
 
     if (arraysAreEqual(solutionPieces, boardPieces)) {
-      console.log('puzzle complete!')
+      setPuzzleComplete(true)
     }
   }, [boardPieces])
 
   useEffect(() => {
-    // selectedPieceIdRef.current = selectedPieceId
     console.log(selectedPieceId)
   }, [selectedPieceId])
+
+  useEffect(() => {
+    if (puzzleComplete) {
+      console.log('puzzle complete! you are a egnius')
+    }
+  }, [puzzleComplete])
 
   const reorderPieces = (i) => {
     if (selectedPieceId !== null) {
@@ -82,7 +88,10 @@ export default function Jigsaw() {
   return (
     <div className='flex flex-col h-full'>
       <div className='flex-1 px-12'>
-        <ul className='grid grid-cols-2 gap-1 w-full h-full'>
+        <ul
+          className='grid grid-cols-2 gap-1 w-full h-full border border-white'
+          style={{ borderColor: puzzleComplete ? 'green' : 'white' }}
+        >
           {boardPieces.map((boardPiece, i) => (
             <li
               className='w-full h-full border border-black border-dashed'
