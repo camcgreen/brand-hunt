@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { arraysAreEqual } from '@/app/utils/helpers'
 
 export default function Jigsaw() {
@@ -44,6 +44,7 @@ export default function Jigsaw() {
     null,
   ])
   const [selectedPieceId, setSelectedPieceId] = useState(null)
+  const [oldSelectedPieceIndex, setOldSelectedPieceIndex] = useState(null)
 
   useEffect(() => {
     const orderedPieces = [...pieces].sort(
@@ -57,19 +58,24 @@ export default function Jigsaw() {
     }
   }, [boardPieces])
 
-  useEffect(
-    () => console.log(`selectedPieceId: ${selectedPieceId}`),
-    [selectedPieceId]
-  )
+  useEffect(() => {
+    // selectedPieceIdRef.current = selectedPieceId
+    console.log(selectedPieceId)
+  }, [selectedPieceId])
 
   const reorderPieces = (i) => {
     if (selectedPieceId !== null) {
       let newBoardPieces = [...boardPieces]
       newBoardPieces[i] = selectedPieceId
+      if (oldSelectedPieceIndex != null) {
+        newBoardPieces[oldSelectedPieceIndex] = null
+      }
       setBoardPieces([...newBoardPieces])
       setSelectedPieceId(null)
+      setOldSelectedPieceIndex(null)
     } else {
-      console.log('piece already selected')
+      setSelectedPieceId(boardPieces[i])
+      setOldSelectedPieceIndex(i)
     }
   }
 
@@ -77,29 +83,18 @@ export default function Jigsaw() {
     <div className='flex flex-col h-full'>
       <div className='flex-1 px-12'>
         <ul className='grid grid-cols-2 gap-1 w-full h-full'>
-          {boardPieces.map((boardPiece, i) =>
-            boardPiece !== null ? (
-              <li
-                className='w-full h-full border border-black border-dashed'
-                style={{
-                  borderColor: selectedPieceId ? 'orange' : 'black',
-                }}
-                onClick={() => reorderPieces(i)}
-                key={i}
-              >
-                {pieces[boardPiece].content}
-              </li>
-            ) : (
-              <li
-                className='w-full h-full border border-black border-dashed'
-                style={{
-                  borderColor: selectedPieceId ? 'orange' : 'black',
-                }}
-                onClick={() => reorderPieces(i)}
-                key={i}
-              ></li>
-            )
-          )}
+          {boardPieces.map((boardPiece, i) => (
+            <li
+              className='w-full h-full border border-black border-dashed'
+              style={{
+                borderColor: selectedPieceId ? 'orange' : 'black',
+              }}
+              onClick={() => reorderPieces(i)}
+              key={i}
+            >
+              {boardPiece !== null && pieces[boardPiece].content}
+            </li>
+          ))}
         </ul>
       </div>
       <div className='h-60 px-12'>
@@ -110,6 +105,7 @@ export default function Jigsaw() {
               <li
                 className='w-full h-full border border-black bg-gray-400 flex justify-center items-center text-center'
                 onClick={() => {
+                  console.log('hey')
                   setSelectedPieceId(piece.id)
                 }}
                 key={piece.id}
