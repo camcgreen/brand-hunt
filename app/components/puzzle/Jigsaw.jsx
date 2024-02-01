@@ -1,51 +1,29 @@
+'use client'
+
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import { pieces, initialBoardPieces, numberOfPieces } from '@/app/utils/content'
 import { arraysAreEqual } from '@/app/utils/helpers'
 
 export default function Jigsaw() {
-  const pieces = [
-    {
-      id: 0,
-      content: 'D',
-      solutionIndex: 3,
-    },
-    {
-      id: 1,
-      content: 'B',
-      solutionIndex: 1,
-    },
-    {
-      id: 2,
-      content: 'F',
-      solutionIndex: 5,
-    },
-    {
-      id: 3,
-      content: 'C',
-      solutionIndex: 2,
-    },
-    {
-      id: 4,
-      content: 'A',
-      solutionIndex: 0,
-    },
-    {
-      id: 5,
-      content: 'E',
-      solutionIndex: 4,
-    },
-  ]
-
-  const [boardPieces, setBoardPieces] = useState([
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ])
+  const router = useRouter()
+  const [boardPieces, setBoardPieces] = useState([...initialBoardPieces])
   const [selectedPieceId, setSelectedPieceId] = useState(null)
   const [oldSelectedPieceIndex, setOldSelectedPieceIndex] = useState(null)
   const [puzzleComplete, setPuzzleComplete] = useState(false)
+
+  useEffect(() => {
+    const piecesFoundInMemory = JSON.parse(localStorage.getItem('piecesFound'))
+    if (piecesFoundInMemory) {
+      if (piecesFoundInMemory.length < numberOfPieces) {
+        router.push('/')
+        console.log('not enough pieces found')
+      }
+    } else {
+      router.push('/')
+      console.log('no pieces found')
+    }
+  }, [])
 
   useEffect(() => {
     const orderedPieces = [...pieces].sort(
@@ -70,18 +48,20 @@ export default function Jigsaw() {
   }, [puzzleComplete])
 
   const reorderPieces = (i) => {
-    if (selectedPieceId !== null) {
-      let newBoardPieces = [...boardPieces]
-      newBoardPieces[i] = selectedPieceId
-      if (oldSelectedPieceIndex != null) {
-        newBoardPieces[oldSelectedPieceIndex] = null
+    if (!puzzleComplete) {
+      if (selectedPieceId !== null) {
+        let newBoardPieces = [...boardPieces]
+        newBoardPieces[i] = selectedPieceId
+        if (oldSelectedPieceIndex != null) {
+          newBoardPieces[oldSelectedPieceIndex] = null
+        }
+        setBoardPieces([...newBoardPieces])
+        setSelectedPieceId(null)
+        setOldSelectedPieceIndex(null)
+      } else {
+        setSelectedPieceId(boardPieces[i])
+        setOldSelectedPieceIndex(i)
       }
-      setBoardPieces([...newBoardPieces])
-      setSelectedPieceId(null)
-      setOldSelectedPieceIndex(null)
-    } else {
-      setSelectedPieceId(boardPieces[i])
-      setOldSelectedPieceIndex(i)
     }
   }
 
