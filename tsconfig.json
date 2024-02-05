@@ -28,6 +28,6 @@
         ".next/types/**/*.ts",
         "app/components/puzzle/Jigsaw.jsx",
         "app/utils/helpers.js"
-, "app/(routes)/[slug]/page.jsx"    ],
+, "app/(routes)/[slug]/page.jsx", "app/(routes)/puzzle/page.jsx"    ],
     "exclude": ["node_modules"]
 }

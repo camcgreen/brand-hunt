@@ -32,8 +32,12 @@ export default function FoundPiece() {
     <>
       <Header />
       <main className='relative h-screen-sm pt-12 flex flex-col'>
-        <section className='py-32 flex justify-center items-center'>
-          <div className='w-32 h-32 bg-gray-400' />
+        <section className='py-28 flex justify-center items-center'>
+          <img
+            src={`/images/${slug}.jpg`}
+            alt={`Puzzle piece ${slug}`}
+            className='w-40 aspect-square bg-gray-400'
+          />
         </section>
         <section className='relative pt-16 px-12 flex-1 overflow-hidden'>
           <div className='absolute right-1/2 top-0 translate-x-1/2 w-[900px] h-[900px] bg-gray-300 rounded-full' />
