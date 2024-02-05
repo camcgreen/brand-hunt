@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Header from '@/app/components/common/Header'
 import Jigsaw from '@/app/components/puzzle/Jigsaw'
+import { numberOfPieces } from '@/app/utils/content'
 
 export default function Home() {
   const router = useRouter()

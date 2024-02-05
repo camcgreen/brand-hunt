@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { pieces, initialBoardPieces, numberOfPieces } from '@/app/utils/content'
+import { pieces, initialBoardPieces } from '@/app/utils/content'
 import { arraysAreEqual } from '@/app/utils/helpers'
 
 export default function Jigsaw() {
